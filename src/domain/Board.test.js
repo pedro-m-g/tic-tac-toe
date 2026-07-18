@@ -3,14 +3,14 @@ import Token from "./Token";
 
 describe('Board', () => {
 
-    test('new boards are empty', () => {
+    test('should initialize with all tiles empty when creating a new board', () => {
         const board = new Board();
         for (let i = 0; i < 9; i++) {
             expect(board.tileAt(i)).toBe(Token.EMPTY);
         }
     });
 
-    test('board places tokens properly', () => {
+    test('should record the token at the correct index when placing a token', () => {
         const board = new Board();
         board.placeToken(3, Token.O);
         board.placeToken(6, Token.X);
@@ -21,7 +21,7 @@ describe('Board', () => {
         expect(board.tileAt(0)).toBe(Token.EMPTY);
     });
 
-    test('board checks for fullness', () => {
+    test('should be full when all tiles are occupied', () => {
         const board = new Board();
 
         expect(board.isFull()).toBe(false);
@@ -38,19 +38,19 @@ describe('Board', () => {
         expect(board.isFull()).toBe(true);
     });
 
-    test('cannot place a tile out of bounds', () => {
+    test('should throw when placing a token out of board bounds', () => {
         const board = new Board();
         expect(() => board.placeToken(-1, Token.X)).toThrow(Error);
         expect(() => board.placeToken(9, Token.X)).toThrow(Error);
     });
 
-    test('cannot ask for a tile out of bounds', () => {
+    test('should throw when querying an index out of board bounds', () => {
         const board = new Board();
         expect(() => board.tileAt(-1)).toThrow(Error);
         expect(() => board.tileAt(9)).toThrow(Error);
     });
 
-    test('cannot place a token on an occupied tile', () => {
+    test('should throw when placing a token on an occupied tile', () => {
         const board = new Board();
         board.placeToken(4, Token.X);
         
@@ -58,7 +58,7 @@ describe('Board', () => {
         expect(board.tileAt(4)).toBe(Token.X);
     });
 
-    test('cannot place an invalid token', () => {
+    test('should throw when placing an invalid token', () => {
         const board = new Board();
         
         expect(() => board.placeToken(4, 'A random string')).toThrow(Error);
