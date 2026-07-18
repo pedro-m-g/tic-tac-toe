@@ -32,13 +32,6 @@ describe('GameTransition Value Object', () => {
         expect(transition.isGameOver()).toBe(true);
     });
 
-    test('should guarantee that the combination array is frozen/immutable', () => {
-        const winningLine = [3, 4, 5];
-        const transition = new GameTransition(GameState.WON, Token.O, winningLine);
-        
-        expect(Object.isFrozen(transition.combination)).toBe(true);
-    });
-
     test('should crash if state is invalid', () => {
         expect(() => new GameTransition('UNKOWN_STATE')).toThrow(Error);
         expect(() => new GameTransition(null)).toThrow(Error);

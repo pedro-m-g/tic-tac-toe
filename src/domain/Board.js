@@ -10,7 +10,7 @@ class Board {
 
     placeToken(tileIndex, token) {
         if (tileIndex < 0 || tileIndex >= SIZE) {
-            throw new Error(`Index out of bounds: ${tileIndex}, allowed values: 0-${SIZE}`);
+            throw new Error(`Index out of bounds: ${tileIndex}, allowed values: 0-${SIZE - 1}`);
         }
         if (this.tiles[tileIndex] !== Token.EMPTY) {
             throw new Error(`Tile already in place for index: ${tileIndex}`);
@@ -24,7 +24,7 @@ class Board {
 
     tileAt(tileIndex) {
         if (tileIndex < 0 || tileIndex >= SIZE) {
-            throw new Error(`Index out of bounds: ${tileIndex}, allowed values: 0-${SIZE}`);
+            throw new Error(`Index out of bounds: ${tileIndex}, allowed values: 0-${SIZE - 1}`);
         }
 
         return this.tiles[tileIndex];

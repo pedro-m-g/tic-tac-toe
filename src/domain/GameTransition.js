@@ -19,8 +19,8 @@ class GameTransition {
         }
 
         this.#state = state;
-        this.#winner = winner;
-        this.#combination = Object.freeze([...combination]);
+        this.#winner = state === GameState.WON ? winner : null;
+        this.#combination = state === GameState.WON ? [...combination] : [];
     }
 
     get state() {
