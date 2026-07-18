@@ -19,6 +19,12 @@ const VICTORY_COMBINATIONS = [
     [2, 4, 6]
 ];
 
+/**
+ * Determines the next game state from the current board.
+ * @param {Board} board - The current game board.
+ * @return {GameTransition} The transition to the won, draw, or playing state.
+ * @throws {Error} If `board` is not a valid `Board` instance.
+ */
 function calculateNextGameState(board) {
     if (!board || !(board instanceof Board)) {
         throw new Error('Must provide a valid board');
