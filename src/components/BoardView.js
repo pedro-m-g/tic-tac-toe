@@ -46,7 +46,7 @@ class BoardView {
     }
 
     #handleTileClicked(event) {
-        const index = event.currentTarget.dataset.index;
+        const index = Number(event.currentTarget.dataset.index);
         if (this.#onTileClicked) {
             this.#onTileClicked(index);
         }

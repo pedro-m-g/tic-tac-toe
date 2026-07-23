@@ -7,7 +7,7 @@ class GameOverDialog {
     #idButtonStop = 'game_over_stop';
 
     #refTemplate = null;
-    #drefDialog = null;
+    #refDialog = null;
     #refMessage = null;
     #refButtonContinue = null;
     #refButtonStop = null;
@@ -16,6 +16,8 @@ class GameOverDialog {
     #onStop = null;
     #boundHandleRestart = null;
     #boundHandleStop = null;
+    #boundHandleClose = null;
+    #boundPreventEsc = null;
 
     constructor() {
         this.#refTemplate = document.getElementById(this.#idTemplate);
@@ -25,28 +27,40 @@ class GameOverDialog {
     }
 
     onRestart(listener) {
-        if (typeof listener === "function") this.#onRestart = listener;
+        if (typeof listener === "function") {
+            this.#onRestart = listener;
+        } else {
+            throw new Error(`Invalid listener: ${listener}`);
+        }
     }
 
     onStop(listener) {
-        if (typeof listener === "function") this.#onStop = listener;
+        if (typeof listener === "function") {
+            this.#onStop = listener;
+        } else {
+            throw new Error(`Invalid listener: ${listener}`);
+        }
     }
 
     openAsWin(winnerToken) {
-        this.#createDialog();
+        if (this.#refDialog === null) {
+            this.#createDialog();
+        }
         this.#refMessage.textContent = `Player ${winnerToken} wins! 🎉`;
-        this.#drefDialog.showModal();
+        this.#refDialog.showModal();
     }
 
     openAsDraw() {
-        this.#createDialog();
+        if (this.#refDialog === null) {
+            this.#createDialog();
+        }
         this.#refMessage.textContent = `It's a draw! 🤝`;
-        this.#drefDialog.showModal();
+        this.#refDialog.showModal();
     }
 
     #close() {
-        if (this.#drefDialog !== null) {
-            this.#drefDialog.close();
+        if (this.#refDialog !== null) {
+            this.#refDialog.close();
             this.#destroyDialog();
         }
     }
@@ -55,7 +69,7 @@ class GameOverDialog {
         const clone = this.#refTemplate.content.cloneNode(true);
         document.body.appendChild(clone);
 
-        this.#drefDialog = document.getElementById(this.#idDialog);
+        this.#refDialog = document.getElementById(this.#idDialog);
         this.#refMessage = document.getElementById(this.#idTitle);
         this.#refButtonContinue = document.getElementById(this.#idButtonContinue);
         this.#refButtonStop = document.getElementById(this.#idButtonStop);
@@ -70,18 +84,29 @@ class GameOverDialog {
             if (this.#onStop) this.#onStop();
         };
 
+        this.#boundHandleClose = (e) => e.preventDefault();
+        this.#boundPreventEsc = (e) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+            }
+        };
+
+        this.#refDialog.addEventListener('cancel', this.#boundHandleClose);
+        this.#refDialog.addEventListener('keydown', this.#boundPreventEsc);
         this.#refButtonContinue.addEventListener('click', this.#boundHandleRestart);
         this.#refButtonStop.addEventListener('click', this.#boundHandleStop);
     }
 
     #destroyDialog() {
-        if (this.#refButtonContinue && this.#refButtonStop) {
+        if (this.#refDialog && this.#refButtonContinue && this.#refButtonStop) {
+            this.#refDialog.removeEventListener('cancel', this.#boundHandleClose);
+            this.#refDialog.removeEventListener('keydown', this.#boundPreventEsc);
             this.#refButtonContinue.removeEventListener('click', this.#boundHandleRestart);
             this.#refButtonStop.removeEventListener('click', this.#boundHandleStop);
         }
 
-        document.body.removeChild(this.#drefDialog);
-        this.#drefDialog = null;
+        document.body.removeChild(this.#refDialog);
+        this.#refDialog = null;
         this.#refMessage = null;
         this.#refButtonContinue = null;
         this.#refButtonStop = null;

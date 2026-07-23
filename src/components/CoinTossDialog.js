@@ -7,13 +7,15 @@ class CoinTossDialog {
     #idSpinner = 'coin_toss_spinner';
     
     #refTemplate = null;
-    #drefDialog = null;
+    #refDialog = null;
     #refButtonContinue = null;
     #refTitle = null;
     #refSpinner = null;
     
     #onContinue = null;
     #boundHandleContinue = null;
+    #boundHandleClose = null;
+    #boundPreventEsc = null;
 
     constructor() {
         this.#refTemplate = document.getElementById(this.#idTemplate);
@@ -31,11 +33,11 @@ class CoinTossDialog {
     }
 
     open() {
-        if (this.#drefDialog === null) {
+        if (this.#refDialog === null) {
             this.#createDialog();
         }
         this.#refButtonContinue.disabled = true;
-        this.#drefDialog.showModal();
+        this.#refDialog.showModal();
     }
 
     showResult(token) {
@@ -47,8 +49,8 @@ class CoinTossDialog {
     }
 
     #close() {
-        if (this.#drefDialog !== null) {
-            this.#drefDialog.close();
+        if (this.#refDialog !== null) {
+            this.#refDialog.close();
             this.#destroyDialog();
         }
     }
@@ -64,23 +66,34 @@ class CoinTossDialog {
         const clone = this.#refTemplate.content.cloneNode(true);
         document.body.appendChild(clone);
 
-        this.#drefDialog = document.getElementById(this.#idDialog);
+        this.#refDialog = document.getElementById(this.#idDialog);
         this.#refTitle = document.getElementById(this.#idTitle);
         this.#refButtonContinue = document.getElementById(this.#idButtonContinue);
         this.#refSpinner = document.getElementById(this.#idSpinner);
 
         this.#boundHandleContinue = (e) => this.#handleContinue(e);
+        this.#boundHandleClose = (e) => e.preventDefault();
+        this.#boundPreventEsc = (e) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+            }
+        };
+
+        this.#refDialog.addEventListener('cancel', this.#boundHandleClose);
+        this.#refDialog.addEventListener('keydown', this.#boundPreventEsc);
         this.#refButtonContinue.addEventListener('click', this.#boundHandleContinue);
     }
 
     #destroyDialog() {
-        if (this.#refButtonContinue) {
+        if (this.#refDialog && this.#refButtonContinue) {
+            this.#refDialog.addEventListener('cancel', this.#boundHandleClose);
+            this.#refDialog.addEventListener('keydown', this.#boundPreventEsc);
             this.#refButtonContinue.removeEventListener('click', this.#boundHandleContinue);
         }
 
-        document.body.removeChild(this.#drefDialog);
+        document.body.removeChild(this.#refDialog);
         
-        this.#drefDialog = null;
+        this.#refDialog = null;
         this.#refButtonContinue = null;
         this.#boundHandleContinue = null;
     }

@@ -19,6 +19,7 @@ class GameController {
     #currentPlayer = null;
 
     #board = null;
+    #gameOver = false;
 
     constructor({
         setupDialog,
@@ -38,7 +39,7 @@ class GameController {
         this.#coinTossDialog.onContinue(() => this.#startBoard());
         this.#boardView.onTileClicked((index) => this.#selectTile(index));
         this.#gameOverDialog.onRestart(() => this.#resetGame());
-        this.#gameOverDialog.onStop(() => console.log('Game finished by user.'));
+        this.#gameOverDialog.onStop(() => this.#stopGame());
 
         this.#board = new Board();
     }
@@ -63,7 +64,7 @@ class GameController {
     }
 
     #selectTile(index) {
-        if (this.#board.isTileOccupied(index)) {
+        if (this.#gameOver || this.#board.isTileOccupied(index)) {
             return;
         }
         this.#board.placeToken(index, this.#currentPlayer);
@@ -73,9 +74,11 @@ class GameController {
 
         switch (transition.state) {
             case GameState.DRAW:
+                this.#gameOver = true;
                 this.#gameOverDialog.openAsDraw();
                 break;
             case GameState.WON:
+                this.#gameOver = true;
                 this.#gameOverDialog.openAsWin(this.#currentPlayer.description);
                 break;
             case GameState.PLAYING:
@@ -87,8 +90,13 @@ class GameController {
 
     #resetGame() {
         this.#board = new Board();
+        this.#gameOver = false;
         this.#boardView.reset();
         this.start();
+    }
+
+    #stopGame() {
+        console.log('Game finished by user.');
     }
 
 }

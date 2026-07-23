@@ -6,12 +6,14 @@ class SetupDialog {
     #idButtonO = 'setup_button_o';
     
     #refTemplate = null;
-    #drefDialog = null;
+    #refDialog = null;
     #refButtonSelectX = null;
     #refButtonSelectO = null;
     
     #onSelect = null;
     #boundHandleSelect = null;
+    #boundHandleClose = null;
+    #boundPreventEsc = null;
 
     constructor() {
         this.#refTemplate = document.getElementById(this.#idTemplate);
@@ -29,15 +31,15 @@ class SetupDialog {
     }
 
     open() {
-        if (this.#drefDialog === null) {
+        if (this.#refDialog === null) {
             this.#createDialog();
         }
-        this.#drefDialog.showModal();
+        this.#refDialog.showModal();
     }
 
     #close() {
-        if (this.#drefDialog !== null) {
-            this.#drefDialog.close();
+        if (this.#refDialog !== null) {
+            this.#refDialog.close();
             this.#destroyDialog();
         }
     }
@@ -55,25 +57,35 @@ class SetupDialog {
         const clone = this.#refTemplate.content.cloneNode(true);
         document.body.appendChild(clone);
 
-        this.#drefDialog = document.getElementById(this.#idDialog);
+        this.#refDialog = document.getElementById(this.#idDialog);
         this.#refButtonSelectX = document.getElementById(this.#idButtonX);
         this.#refButtonSelectO = document.getElementById(this.#idButtonO);
 
         this.#boundHandleSelect = (e) => this.#handleSelect(e);
+        this.#boundHandleClose = (e) => e.preventDefault();
+        this.#boundPreventEsc = (e) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+            }
+        };
 
+        this.#refDialog.addEventListener('cancel', this.#boundHandleClose);
+        this.#refDialog.addEventListener('keydown', this.#boundPreventEsc);
         this.#refButtonSelectX.addEventListener('click', this.#boundHandleSelect);
         this.#refButtonSelectO.addEventListener('click', this.#boundHandleSelect);
     }
 
     #destroyDialog() {
-        if (this.#refButtonSelectX && this.#refButtonSelectO) {
+        if (this.#refDialog && this.#refButtonSelectX && this.#refButtonSelectO) {
+            this.#refDialog.removeEventListener('cancel', this.#boundHandleClose);
+            this.#refDialog.removeEventListener('keydown', this.#boundPreventEsc);
             this.#refButtonSelectX.removeEventListener('click', this.#boundHandleSelect);
             this.#refButtonSelectO.removeEventListener('click', this.#boundHandleSelect);
         }
 
-        document.body.removeChild(this.#drefDialog);
+        document.body.removeChild(this.#refDialog);
         
-        this.#drefDialog = null;
+        this.#refDialog = null;
         this.#refButtonSelectX = null;
         this.#refButtonSelectO = null;
         this.#boundHandleSelect = null;
