@@ -86,8 +86,8 @@ class CoinTossDialog {
 
     #destroyDialog() {
         if (this.#refDialog && this.#refButtonContinue) {
-            this.#refDialog.addEventListener('cancel', this.#boundHandleClose);
-            this.#refDialog.addEventListener('keydown', this.#boundPreventEsc);
+            this.#refDialog.removeEventListener('cancel', this.#boundHandleClose);
+            this.#refDialog.removeEventListener('keydown', this.#boundPreventEsc);
             this.#refButtonContinue.removeEventListener('click', this.#boundHandleContinue);
         }
 
