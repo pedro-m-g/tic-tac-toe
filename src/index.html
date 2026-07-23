@@ -1,8 +1,56 @@
-<html>
+<html lang="en">
     <head>
         <title>Tic Tac Toe</title>
     </head>
     <body>
-        <h1>Tic Tac Toe</h1>
+        <header>
+            <h1>Tic Tac Toe</h1>
+        </header>
+        <main>
+            <div class="status">
+                <p id="status_message"></p>
+            </div>
+            <div id="board">
+                <button class="tile" data-index="0">&nbsp;</button>
+                <button class="tile" data-index="1">&nbsp;</button>
+                <button class="tile" data-index="2">&nbsp;</button>
+                <br />
+                <button class="tile" data-index="3">&nbsp;</button>
+                <button class="tile" data-index="4">&nbsp;</button>
+                <button class="tile" data-index="5">&nbsp;</button>
+                <br />
+                <button class="tile" data-index="6">&nbsp;</button>
+                <button class="tile" data-index="7">&nbsp;</button>
+                <button class="tile" data-index="8">&nbsp;</button>
+            </div>
+        </main>
+        <footer>
+            <small>&copy; Pedro MG - 2026</small>
+        </footer>
+
+        <template id="setup_dialog_template">
+            <dialog id="setup_dialog" aria-labelledby="setup_dialog_title">
+                <h2 id="setup_dialog_title">Select Token for First Player</h2>
+                <div>
+                    <button id="setup_button_x" data-token="X">✖️</button>
+                    <button id="setup_button_o" data-token="O">⭕</button>
+                </div>
+            </dialog>
+        </template>
+        <template id="coin_toss_dialog_template">
+            <dialog id="coin_toss_dialog" aria-labelledby="coin_toss_dialog_title">
+                <h2 id="coin_toss_dialog_title">Choosing Player</h2>
+                <div id="coin_toss_spinner"></div>
+                <button id="coin_toss_button_continue">Continue</button>
+            </dialog>
+        </template>
+        <template id="game_over_dialog_template">
+            <dialog id="game_over_dialog" aria-labelledby="game_over_dialog_title">
+                <h2 id="game_over_dialog_title"></h2>
+                <p>Play again?</p>
+                <button id="game_over_continue">Yes</button>
+                <button id="game_over_stop">No</button>
+            </dialog>
+        </template>
     </body>
 </html>
