@@ -21,7 +21,15 @@ export default {
     },
     mode: 'development',
     module: {
-        rules: [{ test: /\.js%/, use: 'babel-loader' }]
+        rules: [
+            {
+                test: /\.js$/,
+                use: 'babel-loader',
+                resolve: {
+                    fullySpecified: false
+                }
+            }
+        ]
     },
     plugins: [
         new HtmlWebpackPlugin({ template: './src/index.html' })

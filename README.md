@@ -25,6 +25,8 @@ npm test
 | `webpack.config.js` | Webpack Configuration |
 | `src/main.js` | App entry point |
 | `src/index.html` | HTML with automatic app scripts injection |
+| `src/components/` | DOM manipulation logic |
+| `src/controller/` | Core game logic that glues UI and Domain logic together |
 | `src/domain/` | Domain objects for the app |
 | `src/services/` | Functions implementing business logic |
 | `public/` | Output directory for production builds |

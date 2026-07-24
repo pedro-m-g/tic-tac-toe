@@ -30,6 +30,14 @@ class Board {
         return this.tiles[tileIndex];
     }
 
+    isTileAvailable(index) {
+        return this.tileAt(index) === Token.EMPTY;
+    }
+
+    isTileOccupied(index) {
+        return !this.isTileAvailable(index);
+    }
+
     isFull() {
         return this.tiles.every(token => token !== Token.EMPTY);
     }
